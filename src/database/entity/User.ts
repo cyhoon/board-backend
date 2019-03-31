@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 
 import Post from './Post';
 import Comment from './Comment';
 
 @Entity({ name: 'users' })
 class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ name: 'id' })
   id: string;
 
   @Column({ name: 'name' })
