@@ -1,1 +1,1 @@
-board-backend
+## koa-typeorm-ts-boilerplate
