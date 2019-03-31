@@ -8,10 +8,13 @@ class User {
   @PrimaryColumn({ name: 'id' })
   id: string;
 
+  @Column({ name: 'password' })
+  password: string;
+
   @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'join_date' })
+  @Column({ name: 'join_date', default: () => 'CURRENT_TIMESTAMP' })
   joinDate: Date;
 
   @OneToMany(type => Post, post => post.writer, { cascade: true })
