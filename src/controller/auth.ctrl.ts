@@ -1,13 +1,51 @@
 import { Context } from 'koa';
 import { authService, userService } from '../service';
 
-const signIn = (ctx: Context) => {
+const signIn = async (ctx: Context) => {
   try {
+    type BodySchema = {
+      id: string;
+      password: string;
+    };
+
+    const signInValidation = authService.validateSignIn(ctx.request.body);
+
+    if (!signInValidation) {
+      ctx.status = 400;
+      ctx.body = {
+        code: 'WRONG_SCHEMA',
+        message: '요청 파라미터 에러',
+        data: null
+      };
+      return;
+    }
+
+    const { id, password }: BodySchema = ctx.request.body;
+
+    const user = await userService.getUser(id, password);
+
+    if (!user) {
+      ctx.status = 401;
+      ctx.body = {
+        code: 'UNAUTHORIZED',
+        message: '사용자 정보가 조회되지 않습니다.',
+        data: null
+      };
+      return;
+    }
+
+    const authToken = await authService.getAuthToken(user.id);
+
     ctx.sttaus = 200;
     ctx.body = {
       code: 'SUCCESS',
       message: '성공',
-      data: null
+      data: {
+        user,
+        token: {
+          authToken
+        }
+      }
     };
   } catch (error) {
     ctx.sttaus = 500;

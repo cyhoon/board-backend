@@ -27,4 +27,13 @@ const createUser = async (id: string, password: string, name: string) => {
   return userRepo.save(newUser);
 };
 
-export { isExistedUserId, createUser };
+const getUser = async (id: string, password: string) => {
+  const userRepo = getCustomRepository(UserRepo);
+
+  return userRepo.findOne({
+    select: ['id', 'name', 'joinDate'],
+    where: { id, password: utils.encryptPassword(password) }
+  });
+};
+
+export { isExistedUserId, createUser, getUser };
