@@ -8,6 +8,7 @@ const signIn = async (ctx: Context) => {
       password: string;
     };
 
+    // 0. 요청 파라미터 검증
     const signInValidation = authService.validateSignIn(ctx.request.body);
 
     if (!signInValidation) {
@@ -22,6 +23,7 @@ const signIn = async (ctx: Context) => {
 
     const { id, password }: BodySchema = ctx.request.body;
 
+    // 1. 아이디와 비밀번호로 계정 조회
     const user = await userService.getUser(id, password);
 
     if (!user) {
@@ -34,6 +36,7 @@ const signIn = async (ctx: Context) => {
       return;
     }
 
+    // 2. 토큰 발행 후 응답
     const authToken = await authService.getAuthToken(user.id);
 
     ctx.sttaus = 200;
@@ -65,6 +68,7 @@ const signUp = async (ctx: Context) => {
       name: string;
     };
 
+    // 0. 요청 파라미터 검증
     const signUpValidation = authService.validateSignUp(ctx.request.body);
 
     if (!signUpValidation) {
@@ -79,10 +83,10 @@ const signUp = async (ctx: Context) => {
 
     const { id, password, name }: BodySchema = ctx.request.body;
 
-    // 1. 아이디가 이미 있는지 검사한다.
+    // 1. 아이디가 이미 있는지 검사
     const userIdExists = await userService.isExistedUserId(id);
 
-    // 2. 중복된 값이 있다면 중복되었다고 에러 처리한다.
+    // 2. 중복된 값이 있다면 중복되었다고 응답
     if (userIdExists) {
       ctx.status = 409;
       ctx.body = {
@@ -93,11 +97,11 @@ const signUp = async (ctx: Context) => {
       return;
     }
 
-    // 3. DB user 테이블에 데이터를 등록한다.
+    // 3. DB user 테이블에 데이터를 등록
     const user = await userService.createUser(id, password, name);
     delete user.password;
 
-    // 4. 토큰을 발행한 후 응답한다.
+    // 4. 토큰을 발행한 후 응답
     const authToken = await authService.getAuthToken(user.id);
 
     ctx.sttaus = 200;
