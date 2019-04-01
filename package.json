@@ -12,22 +12,27 @@
     "prod": "yarn build && yarn start"
   },
   "dependencies": {
+    "apollo-server-koa": "^2.4.8",
+    "graphql": "^14.2.1",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "kcors": "^2.2.2",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
+    "lodash": "^4.17.11",
     "mysql": "^2.16.0",
     "typeorm": "^0.2.16"
   },
   "devDependencies": {
+    "@types/graphql": "^14.2.0",
     "@types/joi": "^14.3.2",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/kcors": "^2.2.3",
     "@types/koa": "^2.0.48",
     "@types/koa-bodyparser": "^4.2.2",
     "@types/koa-router": "^7.0.40",
+    "@types/lodash": "^4.14.123",
     "dotenv": "^7.0.0",
     "nodemon": "^1.18.10",
     "ts-node": "^8.0.3",
