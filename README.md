@@ -12,6 +12,7 @@
 - Typescript
 - Joi
 - JWT
+- 아주 미세하게 사용된.. Apollo-server-koa, GraphQL
 
 
 
@@ -32,10 +33,23 @@ https://documenter.getpostman.com/view/2200241/S17xqQbJ
 | POST   | /api/posts                               | 게시글 작성 API             |     O     |
 | PUT    | /api/posts/{postId}                      | 게시글 수정 API             |     O     |
 | DELETE | /api/posts/{postId}                      | 게시글 삭제 API             |     O     |
-| GET    | /api/posts/{postId}comments              | 게시글 댓글 조회 API        |     X     |
+| GET    | /api/posts/{postId}/comments             | 게시글 댓글 조회 API        |     X     |
 | POST   | /api/posts/{postId}/comments             | 게시글 댓글 작성 API        |     O     |
 | PUT    | /api/posts/{postId}/comments/{commentId} | 게시글 댓글 수정 API        |     O     |
 | DELETE | /api/posts/{postId}/comments/{commentId} | 게시글 댓글 삭제 API        |     O     |
 | GET    | /api/users/{userId}                      | 사용자 프로필 조회 API      |     X     |
 | GET    | /api/users/{userId}/posts                | 사용자 게시글 목록 조회 API |     X     |
 | GET    | /api/users/{userId}/comments             | 사용자 댓글 목록 조회 API   |     X     |
+
+
+
+### 🧐Backend GraphQL API 리스트
+
+> GraphQL API URL :  http://localhost:4000/graphql
+
+#### Query
+
+| 쿼리 이름                 | 의미                        |
+| ------------------------- | --------------------------- |
+| posts(offset: 0, limit:5) | 게시글을 가지고 온다는 의미 |
+
