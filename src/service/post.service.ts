@@ -74,7 +74,11 @@ const updatePost = async (writerId: string, postId: string, title: string, conte
 
   // 1. 댓글을 가지고 온다.
   const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
-  post.comments = await commentRepo.find({ relations: ['writer'], where: { post: postId } });
+  post.comments = await commentRepo.find({
+    relations: ['writer'],
+    where: { post: postId },
+    order: { id: 'ASC' }
+  });
 
   return post;
 };
@@ -91,7 +95,11 @@ const getPostById = async (postId: string) => {
 
   // 0. 게시글을 가지고온다.
   const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
-  post.comments = await commentRepo.find({ relations: ['writer'], where: { post: postId } });
+  post.comments = await commentRepo.find({
+    relations: ['writer'],
+    where: { post: postId },
+    order: { id: 'ASC' }
+  });
 
   return post;
 };
