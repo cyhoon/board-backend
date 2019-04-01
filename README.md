@@ -1,8 +1,27 @@
-## Board-Backend
+# Board-Backend
 
 
 
-#### Backend Restful API 리스트
+### 😀 프로젝트 기술 스택
+
+- RestfulAPI
+- Node.js
+- Koa
+- Typeorm
+- MySQL
+- Typescript
+- Joi
+- JWT
+
+
+
+### 😁Postman API 테스트 URL
+
+https://documenter.getpostman.com/view/2200241/S17xqQbJ
+
+
+
+### 😄Backend Restful API 리스트
 
 | 메소드 | 주소                                            | 의미                        | 인증 필요 |
 | ------ | ----------------------------------------------- | --------------------------- | :-------: |
