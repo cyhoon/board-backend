@@ -72,4 +72,40 @@ const getPosts = async (userId: string, offset: number, limit: number) => {
   return posts;
 };
 
-export { isExistedUserId, createUser, getUserByIdAndPassword, getUserById, getPosts };
+const getComments = async (userId: string, offset: number, limit: number) => {
+  const postRepo = getCustomRepository(PostRepo);
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  const foundComments = await commentRepo.find({
+    relations: ['writer', 'post'],
+    order: {
+      writeDate: 'DESC'
+    },
+    where: { writer: userId },
+    skip: offset,
+    take: limit
+  });
+
+  const comments = await Promise.all(
+    foundComments.map(async comment => {
+      const post = await postRepo.findOne({
+        relations: ['writer'],
+        where: { id: comment.post.id }
+      });
+
+      const commentCount = await commentRepo.count({ where: { post } });
+
+      return {
+        ...comment,
+        post: {
+          ...post,
+          commentCount
+        }
+      };
+    })
+  );
+
+  return comments;
+};
+
+export { isExistedUserId, createUser, getUserByIdAndPassword, getUserById, getPosts, getComments };
