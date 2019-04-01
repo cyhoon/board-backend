@@ -8,7 +8,7 @@ class User {
   @PrimaryColumn({ name: 'id' })
   id: string;
 
-  @Column({ name: 'password' })
+  @Column({ name: 'password', select: false })
   password: string;
 
   @Column({ name: 'name' })
