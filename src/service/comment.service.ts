@@ -78,11 +78,18 @@ const updateComment = async (writer: User, commentId: number, content: string) =
   return comment;
 };
 
+const deleteComment = async (commentId: number) => {
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  return commentRepo.delete({ id: commentId });
+};
+
 export {
   validationCreateComment,
   createComment,
   existComment,
   checkCommentWriter,
   validationUpdateComment,
-  updateComment
+  updateComment,
+  deleteComment
 };
