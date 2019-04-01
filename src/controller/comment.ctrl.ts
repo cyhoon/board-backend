@@ -7,6 +7,19 @@ const getComments = async (ctx: Context) => {
   try {
     const { postId } = ctx.params;
 
+    // 0. 게시글이 존재하는지 확인한다
+    const postExists = await postService.existPost(postId);
+
+    if (!postExists) {
+      ctx.status = 404;
+      ctx.body = {
+        code: 'NOT_FOUND_POST',
+        message: '게시글을 찾을 수 없습니다',
+        data: null
+      };
+      return;
+    }
+
     const comments = await commentService.getComments(postId);
 
     ctx.status = 200;
