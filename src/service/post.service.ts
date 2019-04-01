@@ -24,7 +24,6 @@ const createPost = async (writer: DeepPartial<User>, title: string, content: str
   });
 
   const post = await postRepo.save(newPost);
-  post.comments = [];
 
   return post;
 };
@@ -65,20 +64,14 @@ const validationUpdatePost = (body: any) => {
 const updatePost = async (writerId: string, postId: string, title: string, content: string) => {
   const userRepo = getCustomRepository(UserRepo);
   const postRepo = getCustomRepository(PostRepo);
-  const commentRepo = getCustomRepository(CommentRepo);
 
   const writer = await userRepo.findOne({ where: { id: writerId } });
 
   // 0. 게시글을 업데이트 한다
   await postRepo.update(postId, { title, content, writer });
 
-  // 1. 댓글을 가지고 온다.
+  // 1. 수정된 게시글을 가지고 온다.
   const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
-  post.comments = await commentRepo.find({
-    relations: ['writer'],
-    where: { post: postId },
-    order: { id: 'ASC' }
-  });
 
   return post;
 };
@@ -95,11 +88,6 @@ const getPostById = async (postId: string) => {
 
   // 0. 게시글을 가지고온다.
   const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
-  post.comments = await commentRepo.find({
-    relations: ['writer'],
-    where: { post: postId },
-    order: { id: 'ASC' }
-  });
 
   return post;
 };
