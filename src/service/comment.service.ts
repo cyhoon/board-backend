@@ -30,4 +30,59 @@ const createComment = async (writer: User, post: Post, content: string) => {
   return comment;
 };
 
-export { validationCreateComment, createComment };
+const existComment = async (commentId: number) => {
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  const comment = await commentRepo.findOne({ id: commentId });
+
+  if (!comment) {
+    return false;
+  }
+
+  return true;
+};
+
+const checkCommentWriter = async (writerId: string, commentId: number) => {
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  const comment = await commentRepo.findOne({
+    where: {
+      writer: writerId,
+      id: commentId
+    }
+  });
+
+  if (!comment) {
+    return false;
+  }
+
+  return true;
+};
+
+const validationUpdateComment = (body: any) => {
+  const schema = Joi.object().keys({
+    content: Joi.string().required()
+  });
+
+  return utils.validateBody(body, schema);
+};
+
+const updateComment = async (writer: User, commentId: number, content: string) => {
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  await commentRepo.update(commentId, { content });
+
+  const comment = await commentRepo.findOne({ relations: ['writer'], where: { id: commentId } });
+  delete comment.post;
+
+  return comment;
+};
+
+export {
+  validationCreateComment,
+  createComment,
+  existComment,
+  checkCommentWriter,
+  validationUpdateComment,
+  updateComment
+};

@@ -14,7 +14,7 @@ import Post from './Post';
 @Entity({ name: 'comments' })
 class Comment {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column({ name: 'content' })
   content: string;
