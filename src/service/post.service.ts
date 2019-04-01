@@ -73,7 +73,8 @@ const updatePost = async (writerId: string, postId: string, title: string, conte
   await postRepo.update(postId, { title, content, writer });
 
   // 1. 댓글을 가지고 온다.
-  const post = await postRepo.findOne({ relations: ['writer', 'comments'], where: { id: postId } });
+  const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
+  post.comments = await commentRepo.find({ relations: ['writer'], where: { post: postId } });
 
   return post;
 };
@@ -89,7 +90,8 @@ const getPostById = async (postId: string) => {
   const commentRepo = getCustomRepository(CommentRepo);
 
   // 0. 게시글을 가지고온다.
-  const post = await postRepo.findOne({ relations: ['writer', 'comments'], where: { id: postId } });
+  const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
+  post.comments = await commentRepo.find({ relations: ['writer'], where: { post: postId } });
 
   return post;
 };
