@@ -3,7 +3,7 @@ import { getCustomRepository, DeepPartial } from 'typeorm';
 
 import { token, utils } from '../library';
 import { PostRepo, CommentRepo, UserRepo } from '../database/repository';
-import { User } from '../database/entity';
+import { User, Comment, Post } from '../database/entity';
 
 const validationCreatePost = (body: any) => {
   const schema = Joi.object().keys({
@@ -73,17 +73,7 @@ const updatePost = async (writerId: string, postId: string, title: string, conte
   await postRepo.update(postId, { title, content, writer });
 
   // 1. 댓글을 가지고 온다.
-  const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
-
-  post.comments = await commentRepo.find({
-    relations: ['writer'],
-    where: { post: postId },
-    order: {
-      writeDate: 'DESC'
-    },
-    skip: 0,
-    take: 5
-  });
+  const post = await postRepo.findOne({ relations: ['writer', 'comments'], where: { id: postId } });
 
   return post;
 };
@@ -99,20 +89,35 @@ const getPostById = async (postId: string) => {
   const commentRepo = getCustomRepository(CommentRepo);
 
   // 0. 게시글을 가지고온다.
-  const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
+  const post = await postRepo.findOne({ relations: ['writer', 'comments'], where: { id: postId } });
 
-  // 1. 댓글 정보를 가지고 온다.
-  post.comments = await commentRepo.find({
+  return post;
+};
+
+const getPosts = async (offset: number, limit: number) => {
+  const postRepo = getCustomRepository(PostRepo);
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  const foundPosts = await postRepo.find({
     relations: ['writer'],
-    where: { post: postId },
     order: {
       writeDate: 'DESC'
     },
-    skip: 0,
-    take: 5
+    skip: offset,
+    take: limit
   });
 
-  return post;
+  const posts = await Promise.all(
+    foundPosts.map(async post => {
+      const commentCount = await commentRepo.count({ where: { post: post.id } });
+      return {
+        ...post,
+        commentCount
+      };
+    })
+  );
+
+  return posts;
 };
 
 export {
@@ -123,5 +128,6 @@ export {
   validationUpdatePost,
   updatePost,
   deletePost,
-  getPostById
+  getPostById,
+  getPosts
 };

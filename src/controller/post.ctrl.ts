@@ -1,13 +1,19 @@
 import { AuthContext } from '../middlewares/auth.middleware';
 import { postService, userService } from '../service';
 
-const getPosts = (ctx: AuthContext) => {
+const getPosts = async (ctx: AuthContext) => {
   try {
+    const { offset, limit } = ctx.query;
+
+    const posts = await postService.getPosts(offset, limit);
+
     ctx.status = 200;
     ctx.body = {
       code: 'SUCCESS',
       message: '성공',
-      data: null
+      data: {
+        posts
+      }
     };
   } catch (error) {
     ctx.sttaus = 500;
