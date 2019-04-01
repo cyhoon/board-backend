@@ -8,7 +8,7 @@ type PayloadType = {
 
 export const generateToken = async (payload: PayloadType) => {
   try {
-    return await jwt.sign(payload, secret, {
+    return jwt.sign(payload, secret, {
       issuer: 'class101',
       expiresIn: '7d',
       subject: 'authToken'
@@ -20,7 +20,7 @@ export const generateToken = async (payload: PayloadType) => {
 
 export const verifyToken = async (token: string) => {
   try {
-    return await jwt.verify(token, secret);
+    return jwt.verify(token, secret);
   } catch (error) {
     throw error;
   }

@@ -3,10 +3,9 @@ import * as jwt from 'jsonwebtoken';
 
 import { token } from '../library';
 
-interface AuthContext extends Context {
+export interface AuthContext extends Context {
   token?: {
-    userEmail: string;
-    nickName: string;
+    id: string;
     iat: Date;
     exp: Date;
     iss: string;
@@ -16,14 +15,16 @@ interface AuthContext extends Context {
 
 const authMiddleware = async (ctx: AuthContext, next: () => Promise<any>) => {
   try {
-    const token = ctx.headers['class101-token'];
+    const authToken = ctx.headers['class101-token'];
 
-    const decodeToken = await token.verifyToken(token);
+    const decodeToken: any = await token.verifyToken(authToken);
 
     if (decodeToken.sub !== 'authToken') throw 'Not a auth token';
     ctx.token = decodeToken;
+
     await next();
   } catch (error) {
+    console.log('error: ', error);
     ctx.status = 403;
     ctx.body = {
       code: 'FORBIDDEN',
