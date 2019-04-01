@@ -5,8 +5,6 @@ import authRouter from './auth.router';
 import userRouter from './user.router';
 import postRouter from './post.router';
 
-import { authMiddleware } from '../middlewares';
-
 const rootRouter: Router = new Router();
 
 /*
@@ -22,7 +20,7 @@ rootRouter.use('/auth', authRouter.routes());
   - 유저 게시글 조회 API : GET : /users/:userId/posts
   - 유저 댓글 조회 API : GET : /users/:userId/comments
 */
-rootRouter.use('/users', authMiddleware, userRouter.routes());
+rootRouter.use('/users', userRouter.routes());
 
 /**
   게시글 API
@@ -32,7 +30,7 @@ rootRouter.use('/users', authMiddleware, userRouter.routes());
   - 글 수정 API : PUT : /posts/:postId
   - 글 삭제 API : DELETE : /posts/:postId
  */
-rootRouter.use('/posts', authMiddleware, postRouter.routes());
+rootRouter.use('/posts', postRouter.routes());
 
 rootRouter.all('*', (ctx: Context) => {
   ctx.status = 404;

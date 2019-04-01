@@ -1,14 +1,16 @@
 import * as Router from 'koa-router';
 import { postCtrl } from '../controller';
 import commentRouter from './comment.router';
+import { authMiddleware } from '../middlewares';
 
 const postRouter: Router = new Router();
 
 postRouter.get('/', postCtrl.getPosts);
 postRouter.get('/:postId', postCtrl.getPost);
-postRouter.post('/', postCtrl.createPost);
-postRouter.put('/:postId', postCtrl.updatePost);
-postRouter.delete('/:postId', postCtrl.deletePost);
+
+postRouter.post('/', authMiddleware, postCtrl.createPost);
+postRouter.put('/:postId', authMiddleware, postCtrl.updatePost);
+postRouter.delete('/:postId', authMiddleware, postCtrl.deletePost);
 
 /*
   댓글 API
