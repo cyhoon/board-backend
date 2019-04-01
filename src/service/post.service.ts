@@ -88,11 +88,18 @@ const updatePost = async (writerId: string, postId: string, title: string, conte
   return post;
 };
 
+const deletePost = async (postId: string) => {
+  const postRepo = getCustomRepository(PostRepo);
+
+  return postRepo.delete({ id: postId });
+};
+
 export {
   validationCreatePost,
   createPost,
   existPost,
   checkPostWriter,
   validationUpdatePost,
-  updatePost
+  updatePost,
+  deletePost
 };

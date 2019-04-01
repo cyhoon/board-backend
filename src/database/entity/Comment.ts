@@ -14,7 +14,7 @@ class Comment {
   @Column({ name: 'write_date' })
   writeDate: Date;
 
-  @ManyToOne(type => Post, post => post.id)
+  @ManyToOne(type => Post, post => post.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'fk_post_id' })
   post: Post;
 

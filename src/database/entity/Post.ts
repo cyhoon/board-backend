@@ -33,7 +33,7 @@ class Post {
   @JoinColumn({ name: 'fk_writer_id' })
   writer: User;
 
-  @OneToMany(type => Comment, comment => comment.post, { cascade: true })
+  @OneToMany(type => Comment, comment => comment.post, { cascade: true, onDelete: 'CASCADE' })
   comments: Comment[];
 }
 

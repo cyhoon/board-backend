@@ -166,12 +166,44 @@ const updatePost = async (ctx: AuthContext) => {
   }
 };
 
-const deletePost = (ctx: AuthContext) => {
+const deletePost = async (ctx: AuthContext) => {
   try {
+    const { id: userId } = ctx.token;
+    const { postId } = ctx.params;
+
+    // 0. 게시글이 존재하는지 확인한다.
+    const postExists = await postService.existPost(postId);
+
+    if (!postExists) {
+      ctx.status = 404;
+      ctx.body = {
+        code: 'NOT_FOUND_POST',
+        message: '게시글을 찾을 수 없습니다',
+        data: null
+      };
+      return;
+    }
+
+    // 1. 게시글이 해당 사용자 아이디로 작성된 게시글인지 확인한다.
+    const isPostWriter = await postService.checkPostWriter(userId, postId);
+
+    if (!isPostWriter) {
+      ctx.status = 403;
+      ctx.body = {
+        code: 'NO_POST_AUTHORITY',
+        message: '게시글 삭제 권한이 없습니다',
+        data: null
+      };
+      return;
+    }
+
+    // 2. 게시글 삭제 ( comments 테이블에 cascde 옵션 줘서 댓글도 다 삭제됨 )
+    await postService.deletePost(postId);
+
     ctx.status = 200;
     ctx.body = {
       code: 'SUCCESS',
-      message: '성공',
+      message: '게시글 삭제 성공',
       data: null
     };
   } catch (error) {
