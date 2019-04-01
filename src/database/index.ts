@@ -9,9 +9,11 @@ const {
   DATABASE_NAME
 } = process.env;
 
+import { logger } from '../library';
+
 async function connectDatabase() {
   try {
-    console.log(`Connecting database host: ${DATABASE_HOST}`);
+    logger.info(`Connecting database host: ${DATABASE_HOST}`);
 
     const options: ConnectionOptions = {
       type: 'mysql',
@@ -29,7 +31,7 @@ async function connectDatabase() {
 
     await createConnection(options);
 
-    console.log(`Success to connect database host: ${DATABASE_HOST}`);
+    logger.info(`Success to connect database host: ${DATABASE_HOST}`);
   } catch (error) {
     throw error;
   }

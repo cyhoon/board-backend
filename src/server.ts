@@ -8,6 +8,8 @@ import rootRouter from './router';
 import connectDatabase from './database';
 import schema from './graphql/schema';
 
+import { logger } from './library';
+
 class Server {
   private app: Koa;
   private router: Router;
@@ -44,8 +46,8 @@ class Server {
     this.setApolloServer();
     this.app.listen(port);
 
-    console.log(`Server application is up and running on port ${port}`);
-    console.log(`GraphQL API Server application is up and running on port ${port}`);
+    logger.info(`Server application is up and running on port ${port}`);
+    logger.info(`GraphQL API Server application is up and running on port ${port}`);
   }
 }
 
