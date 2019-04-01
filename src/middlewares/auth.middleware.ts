@@ -1,5 +1,4 @@
 import { Context } from 'koa';
-import * as jwt from 'jsonwebtoken';
 
 import { token } from '../library';
 

@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { DeepPartial, getRepository, getCustomRepository } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 
 import { utils } from '../library';
 import { User, Post } from '../database/entity';

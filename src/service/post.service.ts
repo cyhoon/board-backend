@@ -1,9 +1,9 @@
 import * as Joi from 'joi';
 import { getCustomRepository, DeepPartial } from 'typeorm';
 
-import { token, utils } from '../library';
+import { utils } from '../library';
 import { PostRepo, CommentRepo, UserRepo } from '../database/repository';
-import { User, Comment, Post } from '../database/entity';
+import { User } from '../database/entity';
 
 const validationCreatePost = (body: any) => {
   const schema = Joi.object().keys({
