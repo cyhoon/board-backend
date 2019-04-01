@@ -14,6 +14,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*"
