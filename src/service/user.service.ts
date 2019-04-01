@@ -45,7 +45,7 @@ const getUserById = async (id: string) => {
   });
 };
 
-const getPosts = async (userId: string, offset: number, limit: number) => {
+const getPosts = async (userId: string) => {
   const postRepo = getCustomRepository(PostRepo);
   const commentRepo = getCustomRepository(CommentRepo);
 
@@ -54,9 +54,7 @@ const getPosts = async (userId: string, offset: number, limit: number) => {
     order: {
       writeDate: 'DESC'
     },
-    where: { writer: userId },
-    skip: offset,
-    take: limit
+    where: { writer: userId }
   });
 
   const posts = await Promise.all(
@@ -72,7 +70,7 @@ const getPosts = async (userId: string, offset: number, limit: number) => {
   return posts;
 };
 
-const getComments = async (userId: string, offset: number, limit: number) => {
+const getComments = async (userId: string) => {
   const postRepo = getCustomRepository(PostRepo);
   const commentRepo = getCustomRepository(CommentRepo);
 
@@ -81,9 +79,7 @@ const getComments = async (userId: string, offset: number, limit: number) => {
     order: {
       writeDate: 'DESC'
     },
-    where: { writer: userId },
-    skip: offset,
-    take: limit
+    where: { writer: userId }
   });
 
   const comments = await Promise.all(
