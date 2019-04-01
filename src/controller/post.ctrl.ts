@@ -19,13 +19,33 @@ const getPosts = (ctx: AuthContext) => {
   }
 };
 
-const getPost = (ctx: AuthContext) => {
+const getPost = async (ctx: AuthContext) => {
   try {
+    const { postId } = ctx.params;
+
+    // 0. 게시글이 존재하는지 확인한다
+    const postExists = await postService.existPost(postId);
+
+    if (!postExists) {
+      ctx.status = 404;
+      ctx.body = {
+        code: 'NOT_FOUND_POST',
+        message: '게시글을 찾을 수 없습니다',
+        data: null
+      };
+      return;
+    }
+
+    // 1. 게시글 데이터를 가지고온다
+    const post = await postService.getPostById(postId);
+
     ctx.status = 200;
     ctx.body = {
       code: 'SUCCESS',
       message: '성공',
-      data: null
+      data: {
+        post
+      }
     };
   } catch (error) {
     ctx.sttaus = 500;

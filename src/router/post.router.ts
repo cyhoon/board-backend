@@ -5,7 +5,7 @@ import commentRouter from './comment.router';
 const postRouter: Router = new Router();
 
 postRouter.get('/', postCtrl.getPosts);
-postRouter.get('/:postId', postCtrl.getPosts);
+postRouter.get('/:postId', postCtrl.getPost);
 postRouter.post('/', postCtrl.createPost);
 postRouter.put('/:postId', postCtrl.updatePost);
 postRouter.delete('/:postId', postCtrl.deletePost);

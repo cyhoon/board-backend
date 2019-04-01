@@ -94,6 +94,27 @@ const deletePost = async (postId: string) => {
   return postRepo.delete({ id: postId });
 };
 
+const getPostById = async (postId: string) => {
+  const postRepo = getCustomRepository(PostRepo);
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  // 0. 게시글을 가지고온다.
+  const post = await postRepo.findOne({ relations: ['writer'], where: { id: postId } });
+
+  // 1. 댓글 정보를 가지고 온다.
+  post.comments = await commentRepo.find({
+    relations: ['writer'],
+    where: { post: postId },
+    order: {
+      writeDate: 'DESC'
+    },
+    skip: 0,
+    take: 5
+  });
+
+  return post;
+};
+
 export {
   validationCreatePost,
   createPost,
@@ -101,5 +122,6 @@ export {
   checkPostWriter,
   validationUpdatePost,
   updatePost,
-  deletePost
+  deletePost,
+  getPostById
 };
