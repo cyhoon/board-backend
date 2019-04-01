@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 
-import { UserRepo } from '../database/repository';
+import { UserRepo, PostRepo, CommentRepo } from '../database/repository';
 import { utils } from '../library';
 
 const isExistedUserId = async (id: string) => {
@@ -45,4 +45,31 @@ const getUserById = async (id: string) => {
   });
 };
 
-export { isExistedUserId, createUser, getUserByIdAndPassword, getUserById };
+const getPosts = async (userId: string, offset: number, limit: number) => {
+  const postRepo = getCustomRepository(PostRepo);
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  const foundPosts = await postRepo.find({
+    relations: ['writer'],
+    order: {
+      writeDate: 'DESC'
+    },
+    where: { writer: userId },
+    skip: offset,
+    take: limit
+  });
+
+  const posts = await Promise.all(
+    foundPosts.map(async post => {
+      const commentCount = await commentRepo.count({ where: { post: post.id } });
+      return {
+        ...post,
+        commentCount
+      };
+    })
+  );
+
+  return posts;
+};
+
+export { isExistedUserId, createUser, getUserByIdAndPassword, getUserById, getPosts };
