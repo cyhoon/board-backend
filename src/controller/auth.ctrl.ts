@@ -24,7 +24,7 @@ const signIn = async (ctx: Context) => {
     const { id, password }: BodySchema = ctx.request.body;
 
     // 1. 아이디와 비밀번호로 계정 조회
-    const user = await userService.getUser(id, password);
+    const user = await userService.getUserByIdAndPassword(id, password);
 
     if (!user) {
       ctx.status = 401;

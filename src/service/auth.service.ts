@@ -1,8 +1,6 @@
 import * as Joi from 'joi';
-import { getCustomRepository } from 'typeorm';
 
 import { token, utils } from '../library';
-import { UserRepo } from '../database/repository';
 
 const validateSignIn = (body: any) => {
   const schema = Joi.object().keys({
