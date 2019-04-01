@@ -40,7 +40,7 @@ const getUserById = async (id: string) => {
   const userRepo = getCustomRepository(UserRepo);
 
   return userRepo.findOne({
-    select: ['id', 'name'],
+    select: ['id', 'name', 'joinDate'],
     where: { id }
   });
 };
