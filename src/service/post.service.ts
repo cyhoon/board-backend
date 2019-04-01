@@ -118,6 +118,12 @@ const getPosts = async (offset: number, limit: number) => {
   return posts;
 };
 
+const getPostTotal = async () => {
+  const postRepo = getCustomRepository(PostRepo);
+
+  return postRepo.count();
+};
+
 export {
   validationCreatePost,
   createPost,
@@ -127,5 +133,6 @@ export {
   updatePost,
   deletePost,
   getPostById,
-  getPosts
+  getPosts,
+  getPostTotal
 };

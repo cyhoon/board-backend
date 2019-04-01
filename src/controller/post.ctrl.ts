@@ -5,6 +5,7 @@ const getPosts = async (ctx: AuthContext) => {
   try {
     const { offset, limit } = ctx.query;
 
+    const postTotal = await postService.getPostTotal();
     const posts = await postService.getPosts(offset, limit);
 
     ctx.status = 200;
@@ -12,6 +13,7 @@ const getPosts = async (ctx: AuthContext) => {
       code: 'SUCCESS',
       message: '성공',
       data: {
+        postTotal,
         posts
       }
     };
