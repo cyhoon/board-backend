@@ -84,6 +84,20 @@ const deleteComment = async (commentId: number) => {
   return commentRepo.delete({ id: commentId });
 };
 
+const getComments = async (postId: number) => {
+  const commentRepo = getCustomRepository(CommentRepo);
+
+  return commentRepo.find({
+    relations: ['writer'],
+    where: {
+      post: postId
+    },
+    order: {
+      id: 'ASC'
+    }
+  });
+};
+
 export {
   validationCreateComment,
   createComment,
@@ -91,5 +105,6 @@ export {
   checkCommentWriter,
   validationUpdateComment,
   updateComment,
-  deleteComment
+  deleteComment,
+  getComments
 };

@@ -2,15 +2,29 @@ import { Context } from 'koa';
 
 import { AuthContext } from '../middlewares/auth.middleware';
 import { commentService, userService, postService } from '../service';
-import { Post } from '../database/entity';
 
-const getComments = (ctx: Context) => {
-  ctx.status = 200;
-  ctx.body = {
-    code: 'SUCCESS',
-    message: '성공',
-    data: {}
-  };
+const getComments = async (ctx: Context) => {
+  try {
+    const { postId } = ctx.params;
+
+    const comments = await commentService.getComments(postId);
+
+    ctx.status = 200;
+    ctx.body = {
+      code: 'SUCCESS',
+      message: '성공',
+      data: {
+        comments
+      }
+    };
+  } catch (error) {
+    ctx.sttaus = 500;
+    ctx.body = {
+      code: 'SERVER_ERROR',
+      message: '[서버에러] 관리자에게 문의해 주세요',
+      data: null
+    };
+  }
 };
 
 const createComment = async (ctx: AuthContext) => {
